@@ -111,4 +111,3 @@ results/porto/
 - Each admitted user releases two privatized categorical reports and one trajectory-independent stage index.
 - Raw trajectories and unrandomized representations remain on the client side.
 - Trajectories outside the admitted domain are excluded rather than truncated.
-- The 6x6 grid is used only as the common evaluation resolution.
