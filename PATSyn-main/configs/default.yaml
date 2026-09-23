@@ -1,0 +1,127 @@
+# ============================================================
+# PATSyn default configuration
+# Progress-Aligned Trajectory Synthesis under Local DP
+# ============================================================
+
+project:
+  name: "PATSyn"
+  seed: 42
+
+# ------------------------------------------------------------
+# Privacy settings
+# ------------------------------------------------------------
+privacy:
+  # Privacy budgets evaluated in the paper
+  epsilons:
+    - 0.5
+    - 1.0
+    - 1.5
+    - 2.0
+
+  # epsilon_q = rho * epsilon
+  # epsilon_x = (1 - rho) * epsilon
+  rho: 0.6
+
+# ------------------------------------------------------------
+# PATSyn model settings
+# ------------------------------------------------------------
+model:
+  # Number of normalized-progress stages
+  R: 3
+
+  # Maximum number of transitions in the admitted domain
+  L_max: 16
+
+  # Topology-stabilization weight
+  lambda: 0.05
+
+  # HCR is used for both categorical private reports
+  randomizer: "hcr"
+
+# ------------------------------------------------------------
+# Local preprocessing and admission
+# ------------------------------------------------------------
+preprocessing:
+  # Remove repeated consecutive grid cells
+  remove_consecutive_duplicates: true
+
+  # Complete nonadjacent consecutive cells using a public
+  # shortest path in the grid graph
+  shortest_path_completion: true
+
+  # Deterministic public tie breaking for multiple shortest paths
+  deterministic_tie_break: true
+
+  # Trajectories outside Omega_tau are excluded
+  exclude_outside_domain: true
+
+  # PATSyn never truncates a trajectory to satisfy L_max
+  truncate_long_trajectories: false
+
+# ------------------------------------------------------------
+# Experiment settings
+# ------------------------------------------------------------
+experiment:
+  seeds:
+    - 42
+    - 43
+    - 44
+    - 45
+    - 46
+
+  # Default epsilon for quick/single-run experiments
+  default_epsilon: 1.0
+
+# ------------------------------------------------------------
+# Evaluation settings
+# ------------------------------------------------------------
+evaluation:
+  # Shared grid used ONLY for cross-method evaluation.
+  # This is not necessarily the PATSyn modeling grid.
+  evaluation_grid:
+    rows: 6
+    cols: 6
+
+  # General utility
+  num_range_queries: 200
+  top_k_hotspots: 5
+  top_k_patterns: 100
+  pattern_lengths:
+    - 2
+    - 3
+
+  # Length-wise structural evaluation
+  length_groups:
+    - name: "short"
+      min_length: 1
+      max_length: 3
+
+    - name: "medium"
+      min_length: 4
+      max_length: 5
+
+    - name: "long"
+      min_length: 6
+      max_length: null
+
+# ------------------------------------------------------------
+# Output / reproducibility
+# ------------------------------------------------------------
+output:
+  save_reports: true
+  save_model: true
+  save_synthetic: true
+  save_sampled_conditions: true
+  save_metrics: true
+  save_manifest: true
+
+  # Record runtime and peak resident set size
+  measure_runtime: true
+  measure_peak_rss: true
+
+# ------------------------------------------------------------
+# Logging
+# ------------------------------------------------------------
+logging:
+  level: "INFO"
+  save_log: true
