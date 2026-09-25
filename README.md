@@ -1,0 +1,114 @@
+# PCTSyn
+
+This repository provides the main experimental implementation for:
+
+**PCTSyn: Progress-Aligned and Constraint-Satisfying Trajectory Synthesis under Local Differential Privacy**
+
+PCTSyn uses a fixed two-report trajectory-level LDP mechanism to recover progress-aligned mobility statistics and generates synthetic trajectories through exact-step destination-conditioned sampling.
+
+## Environment
+
+We recommend Python 3.10.
+
+```bash
+conda create -n pctsyn python=3.10 -y
+conda activate pctsyn
+pip install -r requirements.txt
+```
+
+## Data
+
+This repository uses the Porto taxi trajectory dataset as the example dataset.
+
+Place the raw Porto CSV file at:
+
+```text
+data/raw/porto/train.csv
+```
+
+The main configuration files are:
+
+```text
+configs/default.yaml
+configs/porto.yaml
+```
+
+Before running the pipeline, fill the public grid, length-bin, and domain-bound settings in `configs/porto.yaml` with the exact configuration used in the paper experiments.
+
+## Run PCTSyn
+
+Run the following scripts from the repository root:
+
+```bash
+python scripts/prepare_data.py --config configs/porto.yaml
+python scripts/build_domain.py --config configs/porto.yaml
+python scripts/run_pctsyn.py --config configs/porto.yaml --epsilon 1.0 --seed 42
+python scripts/evaluate.py --config configs/porto.yaml --epsilon 1.0 --seed 42
+```
+
+For a quick end-to-end run:
+
+```bash
+python scripts/reproduce_main.py --quick
+```
+
+For the main multi-budget and multi-seed experiments:
+
+```bash
+python scripts/reproduce_main.py --full
+```
+
+## Code Structure
+
+```text
+configs/
+    default.yaml
+    porto.yaml
+
+scripts/
+    prepare_data.py
+    build_domain.py
+    run_pctsyn.py
+    evaluate.py
+    reproduce_main.py
+
+pctsyn/
+    preprocessing.py
+    domain.py
+    hcr.py
+    reporting.py
+    recovery.py
+    synthesis.py
+    metrics.py
+    utils.py
+```
+
+The core PCTSyn implementation is contained in:
+
+```text
+pctsyn/reporting.py
+pctsyn/recovery.py
+pctsyn/synthesis.py
+```
+
+## Outputs
+
+Synthetic trajectories and intermediate outputs are stored under:
+
+```text
+outputs/porto/
+```
+
+Evaluation results are stored under:
+
+```text
+results/porto/
+```
+
+## Notes
+
+- The public grid, legal transitions, exact-step reachability, and feasible-length sets are public information.
+- Each admitted user releases two privatized categorical reports and one trajectory-independent stage index.
+- Raw trajectories and unrandomized representations remain on the client side.
+- Trajectories outside the admitted domain are excluded rather than truncated.
+- The 6x6 grid is used only as the common evaluation resolution.

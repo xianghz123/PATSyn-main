@@ -1,0 +1,31 @@
+dataset:
+  name: "porto"
+  type: "real"
+  area: "Porto"
+  raw_file: "train.csv"
+  format: "porto_csv"
+  polyline_column: "POLYLINE"
+  num_trajectories: 100000
+  num_synthetic: 100000
+
+paths:
+  raw_dir: "data/raw/porto"
+  processed_dir: "data/processed/porto"
+  cache_dir: "data/cache/porto"
+  output_dir: "outputs/porto"
+  result_dir: "results/porto"
+
+# Fill these values with the exact public configuration
+# used to produce the paper results.
+public_domain:
+  grid:
+    rows: null
+    cols: null
+    min_lon: null
+    max_lon: null
+    min_lat: null
+    max_lat: null
+    connectivity: 8
+
+  length_bins: null
+  D_max: null
